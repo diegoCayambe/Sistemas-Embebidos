@@ -1,0 +1,34 @@
+#include <LiquidCrystal.h>
+
+#define velocidad 100  //constante definidad
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2); //(RW, SYNC, d4, d5, d6, d7)
+int i;
+
+void setup() {
+  Serial.begin(9600);
+  lcd.begin(16, 2); //(COLM, ROW)
+  lcd.clear();
+}
+
+void loop() {
+  if (Serial.available()>0)  {
+      String texto_in = Serial.readString();
+      int tam_texto = texto_in.length();
+      
+      for(i=16 ;i>=1; i--){
+        lcd.clear();
+        lcd.setCursor(i, 0);
+        lcd.print(texto_in);
+        delay(velocidad);
+      }
+        
+      for(i=0; i<=tam_texto; i++){
+        lcd.setCursor(0,0);
+        lcd.print(texto_in.substring(i-1));
+        delay(velocidad);
+        lcd.clear();
+      }
+   }
+
+}
