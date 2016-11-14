@@ -1,0 +1,29 @@
+#include <LiquidCrystal.h>
+
+#define velocidad 100 //constante definida
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2); //(RW, SYNC, d4, d5, d6, d7)
+int i;
+
+void setup() {
+  Serial.begin(9600);
+  lcd.begin(16, 2); //(COLM, ROW)
+  lcd.clear();
+}
+
+void loop() {
+  if (Serial.available()>0)  {
+      String texto_in = Serial.readString();
+      lcd.setCursor(0,0);
+      
+      if(texto_in.equals("k3RT") ){
+        lcd.clear();
+        lcd.print("CLAVE CORRECTA");
+      }
+      else{
+        lcd.clear();
+        lcd.print("CLAVE INCORRECTA");
+      }
+   }
+
+}
