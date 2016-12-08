@@ -1,0 +1,101 @@
+/*UTN - FICA - CIERCOM - SISTEMAS EMBEBIDOS // DIEGO CAYAMBE
+
+Se deben realizar los siguientes metodos que seran impresos por cx serial.
+  -> La suma de cada fila
+  -> La multiplicacion de cada columna
+  -> El promedio de las sumas de todas las columnas (solo imprime un valor)  
+*/
+
+// datos.h
+//int matriz [20][3] = {{1, 22,9},{24,3, 8},{23,14,0},{20,16,6},{1, 12,-3},{4, -3,18},{18,-3,21},{6, -4,0},{24,22,9},{19,20,25},
+//{13,8,4},{23,19,12},{2, 4,-3},{-2,15,18},{-5,24,12},{-3,3,25},{1, 13,22},{17,10,17},{-3,5,21},{11,14,5},};
+ 
+#include "datos.h"
+#include <math.h>
+int i, j;      //
+int fila = 20;  //
+int colum = 3;  //
+int sumFila[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+double prodFila[3] = {1,1,1} ;
+int sumColum[3] = {0,0,0};
+int sumProm = 0;
+int a = 1;
+int notacion = 0;
+
+void setup() 
+{
+   Serial.begin(9600);
+}
+void loop() 
+{
+  if (a==1)
+  {
+     sumaDeCadaFila();
+     productoDeCadaColumna();
+     promedioDeCadaColuma();
+   }
+   a = 2;
+}
+
+void sumaDeCadaFila ()
+{
+     Serial.println("SUMA DE CADA FILA:");
+     for(i = 0; i<fila; i++)
+     {
+        for(j = 0; j<colum; j++)
+        {
+            sumFila[i] = sumFila[i] + matriz [i][j];
+        }
+     Serial.print("Fila ");
+     Serial.print(i+1);
+     Serial.print(" : ");
+     Serial.println(sumFila[i]);
+     }
+}
+
+void productoDeCadaColumna ()
+{
+     Serial.println("PRODUCTO DE CADA COLUMNA: ");
+     for(i = 0; i<colum; i++)
+     {
+        for(j = 0; j<fila; j++)
+        {
+            prodFila[i] = prodFila[i] * matriz [j][i];
+            if(prodFila[i] > 10 || prodFila[i] < -10 && prodFila[i] != 0)
+            {
+                prodFila[i] = prodFila[i] / 10;
+                notacion++;
+            }
+        }
+     Serial.print("El producto de la columna ");
+     Serial.print(i+1);
+     Serial.print(" : ");
+     Serial.print(prodFila[i]);
+     Serial.print("x10^");
+     Serial.println(notacion);
+     notacion = 0;
+     }
+}
+
+void promedioDeCadaColuma ()
+{
+    Serial.println("PROMEDIO DE LA SUMA DE LAS 3 COLUMNAS: ");
+     for(i = 0; i<colum; i++)
+     {
+        for(j = 0; j<fila; j++)
+        {
+            sumColum[i] = sumColum[i] + matriz [j][i];
+        }
+     Serial.print("Suma de la columna ");
+     Serial.print(i+1);
+     Serial.print(" : ");
+     Serial.println(sumColum[i]);
+     }
+     for(i = 0; i < colum; i++)
+     {
+         sumProm = sumProm + sumColum[i];
+     }
+     Serial.print("Promedio : ");
+     double promedio = sumProm / colum;
+     Serial.println(promedio);
+}
